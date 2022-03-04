@@ -143,6 +143,151 @@
           }
         }
       }
+    },
+     "/api/CloseAccount": {
+      "post": {
+        "tags": [
+          "Close account"
+        ],
+        "description": "Closes an account when passed in an account number",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "accnumber",
+            "required": true,
+            "description": "Account Number",
+            "schema": {
+              "type": "string",
+              "example": "ea77bf19-78b8-4ef4-98b0-2764f1bb5d6e"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account closed or not",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Account was closed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ApplyTransactionToCustomerAccountAsync": {
+      "post": {
+        "summary": "Handles transactions to the customer account",
+        "requestBody": {
+          "description": "Credits/Debits an amount to the account number",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "accountNumber",
+                  "amount",
+                  "transactionType"
+                ],
+                "properties": {
+                  "accountNumber": {
+                    "type": "string",
+                    "example": "340fe77f-b9d2-46cb-9365-2e8db15a4924"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "example": 123.15
+                  },
+                  "transactionType": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created account for customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "firstName": {
+                          "type": "string",
+                          "example": "John"
+                        },
+                        "lastName": {
+                          "type": "string",
+                          "example": "Smith"
+                        },
+                        "account": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "accountNumber": {
+                              "type": "string",
+                              "example": "340fe77f-b9d2-46cb-9365-2e8db15a4924"
+                            },
+                            "balance": {
+                              "type": "integer",
+                              "example": 123.15
+                            },
+                            "status": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "0 is open, 1 is closed"
+                            }
+                          }
+                        },
+                        "statusCode": {
+                          "type": "integer",
+                          "example": 200
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Invalid inputs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
